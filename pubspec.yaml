@@ -1,0 +1,16 @@
+name: activity_ring
+description: A new Flutter package project.
+version: 0.0.1
+author: Akash <akashgurava@outlook.com>
+homepage: https://github.com/akashgurava/activity_ring
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
