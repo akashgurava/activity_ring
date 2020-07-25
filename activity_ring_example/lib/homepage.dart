@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
 import 'package:activity_ring/activity_ring.dart';
 
 class HomePage extends StatelessWidget {

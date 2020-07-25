@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:activity_ring/src/utilities.dart';
 
 /// Custom painter to draw the ring
+// TODO: reduce creating gradient, shader, paint for same params
 class DrawRing extends CustomPainter {
   // ignore: public_member_api_docs
   const DrawRing({
