@@ -1,168 +1,193 @@
 import 'dart:math';
 
+import 'package:activity_ring/src/color.dart';
+import 'package:activity_ring/src/utilities.dart';
 import 'package:flutter/material.dart';
 
-import 'package:activity_ring/src/utilities.dart';
-
-/// Custom painter to draw the ring
-// TODO: reduce creating gradient, shader, paint for same params
-class DrawRing extends CustomPainter {
+/// Draws a full ring with [width] and [radius].
+class DrawFullRing extends CustomPainter {
   // ignore: public_member_api_docs
-  const DrawRing({
-    @required this.percent,
-    @required this.strokeWidth,
-    @required this.ringColor,
-    this.ringBackgroundColor,
-  })  : assert(percent != null, 'percent is a required param'),
-        assert(ringColor != null, 'Ring color is a required parameter'),
+  const DrawFullRing({
+    @required this.width,
+    this.ringPaint,
+    this.center,
+    this.radius,
+  })  : assert(width != null, 'strokeWidth is a required param'),
         super();
 
-  /// Percentage of ring to fill
-  final double percent;
-
   /// Width of ring
-  final double strokeWidth;
+  final double width;
 
-  /// Color of ring
-  final List<List<Color>> ringColor;
+  /// Color for ring.
+  final Paint ringPaint;
 
-  /// Color of background of ring.
+  /// Center for this ring.
   ///
-  /// If null then no background is drawn.
-  final Color ringBackgroundColor;
+  /// If null parent widget's Size will be used.
+  /// Then center = Offset(size.width / 2, size.height / 2)
+  final Offset center;
 
-  void _drawEmptyCircle(
-    Offset center,
-    double radius,
-    Canvas canvas,
-    double angle, {
-    @required Color color,
-  }) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-    final offset = Offset(
-      center.dx + radius * cos(angle),
-      center.dy + radius * sin(angle),
-    );
-    canvas.drawCircle(
-      offset,
-      strokeWidth / 2,
-      paint,
-    );
-  }
+  /// Ring's radius.
+  ///
+  /// If null parent widget's Size will be used.
+  /// Then radius = (min(size.width, size.height) - strokeWidth) / 2
+  final double radius;
 
-  List<Color> _currentRingColor(int currentRing) {
-    if (currentRing <= ringColor.length) {
-      return ringColor[currentRing - 1];
-    } else {
-      final missingRings = currentRing - ringColor.length;
-      final lastColor = ringColor.last.last;
-      final color = [
-        brighten(lastColor, (missingRings - 1) * 20.0),
-        brighten(lastColor, missingRings * 20.0),
-      ];
-      return color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final ringCenter = center ?? Offset(size.width / 2, size.height / 2);
+
+    final ringRadius = radius ?? (min(size.width, size.height) - width) / 2;
+
+    if (ringPaint != null) {
+      canvas.drawCircle(ringCenter, ringRadius, ringPaint);
     }
   }
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // size.width, height is reduced by 2 off the parent container
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
 
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (min(size.width, size.height) - strokeWidth) / 2;
-    final rect = Rect.fromCircle(center: center, radius: radius);
-    if (ringBackgroundColor != null) {
-      // Outer circle style on which the percentage indicator is drawn
-      final outerCircle = Paint()
-        ..strokeWidth = strokeWidth
-        ..color = ringBackgroundColor
-        ..style = PaintingStyle.stroke;
+/// Custom painter to draw ring
+class DrawRing extends CustomPainter {
+  // ignore: public_member_api_docs
+  const DrawRing({
+    @required this.percent,
+    @required this.color,
+    @required this.width,
+    Offset center,
+    double radius,
+  })  : assert(percent != null, 'percent is a mandatory param'),
+        assert(width != null, 'strokeWidth is a required param'),
+        _center = center,
+        _radius = radius,
+        _numCircles = percent ~/ 100 + 1,
+        super();
 
-      // this draws main outer circle
-      canvas.drawCircle(center, radius, outerCircle);
-    }
-    const pi2 = 2 * pi;
-    final cutoff = 100 - ((100 * strokeWidth) / (pi2 * radius));
-    final startAngle = degreeToRadians(-90);
+  /// Percent of ring to paint.
+  ///
+  /// Pass the value after * 100 like 8.9 instead of 0.089
+  final double percent;
 
-    final numCirles = percent ~/ 100 + 1;
-    var currentRing = 1;
+  /// Color scheme for rings
+  final RingColorScheme color;
 
-    for (; currentRing < numCirles; currentRing++) {
-      if (currentRing > 0) {
-        final shader = SweepGradient(
-          colors: _currentRingColor(currentRing),
-          tileMode: TileMode.repeated,
-          startAngle: 3 * pi / 2,
-          endAngle: 7 * pi / 2,
-        ).createShader(
-          Rect.fromCircle(
-            center: center,
-            radius: 0,
-          ),
-        );
-        final paint = Paint()
-          ..strokeCap = StrokeCap.round
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth
-          ..shader = shader;
+  /// Width of ring
+  final double width;
 
-        // this draws main outer circle
-        canvas.drawCircle(center, radius, paint);
-      }
-    }
-    final currentRingPercent = percent % 100;
-    final currentRingColor = _currentRingColor(currentRing);
+  /// Center for this ring.
+  ///
+  /// If null parent widget's Size will be used.
+  /// Then center = Offset(size.width / 2, size.height / 2)
+  final Offset _center;
 
-    final shader = SweepGradient(
-      colors: currentRingColor,
-      tileMode: TileMode.repeated,
-      startAngle: degreeToRadians(270),
-      endAngle: degreeToRadians(270 + 360.0),
-    ).createShader(
-      Rect.fromCircle(
-        center: center,
-        radius: 0,
-      ),
+  /// Ring's radius.
+  ///
+  /// If null parent widget's Size will be used.
+  /// Then radius = (min(size.width, size.height) - strokeWidth) / 2
+  final double _radius;
+
+  final int _numCircles;
+
+  /// Get the center for placing smaller circles around the ring.
+  Offset getSmallCircleCenter(
+    Offset ringCenter,
+    double ringRadius,
+    double angle,
+  ) {
+    return Offset(
+      ringCenter.dx + ringRadius * cos(angle),
+      ringCenter.dy + ringRadius * sin(angle),
     );
-    final paint = Paint()
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..shader = shader;
+  }
 
-    final sweepAngle = (currentRingPercent / 100) * pi2;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = _center ?? Offset(size.width / 2, size.height / 2);
+    final radius = _radius ?? (min(size.width, size.height) - width) / 2;
 
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    final startAngle = degreeToRadians(-90);
+    // Calculate sweepAngle only extra percent after removing 100s(full ring).
+    final sweepAngle = ((percent % 100) / 100) * pi * 2;
+    // Calculate cutoff to extra circle at the end of arc
+    final cutoff = 100 - ((100 * width) / (pi * 2 * radius));
+
+    // Update colors cache for numbers of circles we are going to paint.
+    color
+      ..updateRingColors(_numCircles)
+      ..setPaints(center, width);
+
+    // If number of circles is more than 1, paint only last but one circle
+    if (_numCircles > 1) {
+      canvas.drawCircle(
+        center,
+        radius,
+        color.getCirclePaints(_numCircles - 1, center, width).arcPaint,
+      );
+    }
+
+    // Paint ring for 0<percent<100 values.
     canvas.drawArc(
       rect,
       startAngle,
       sweepAngle,
       false,
-      paint,
+      color.getCirclePaints(_numCircles, center, width).arcPaint,
     );
 
-    // Draw a extra small circle at the initial point to cover
-    // circular strokeCap
-    if (currentRingPercent < 100) {
-      _drawEmptyCircle(
-        center,
-        radius,
-        canvas,
-        degreeToRadians(-90),
-        color: currentRingColor[0],
+    // Paint initial circle to cover stroke's circle at the beginning
+    if (_numCircles > 1 && percent % 100 <= 0.1) {
+      canvas.drawCircle(
+        getSmallCircleCenter(center, radius, degreeToRadians(-90)),
+        width / 2,
+        color.getCirclePaints(_numCircles - 1, center, width).finalCirclePaint,
+      );
+    } else {
+      canvas.drawCircle(
+        getSmallCircleCenter(center, radius, degreeToRadians(-90)),
+        width / 2,
+        color.getCirclePaints(_numCircles, center, width).initialCirclePaint,
       );
     }
-    if (currentRingPercent >= cutoff) {
-      _drawEmptyCircle(
-        center,
-        radius,
-        canvas,
-        -pi / 2 + sweepAngle,
-        color: currentRingColor[currentRingColor.length - 1],
+
+    if (percent % 100 >= cutoff) {
+      canvas.drawCircle(
+        getSmallCircleCenter(center, radius, -pi / 2 + sweepAngle),
+        width / 2,
+        color.getCirclePaints(_numCircles, center, width).finalCirclePaint,
       );
     }
+
+    // final oval = Path()
+    //   ..addOval(Rect.fromCircle(center: offset, radius: width + 5));
+    // final shadowPaint = Paint()
+    //   ..color = Colors.black.withOpacity(0.3)
+    //   ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 20);
+    // canvas.drawArc(
+    //   rect,
+    //   startAngle,
+    //   sweepAngle,
+    //   false,
+    //   paints,
+    // );
+
+    // canvas.drawPath(oval, shadowPaint);
+
+    // final paint = Paint()
+    //   ..color = Colors.blue
+    //   ..style = PaintingStyle.stroke;
+
+    // final pp = Path()..arcTo(rect, startAngle, sweepAngle, false);
+    // canvas.drawPath(pp, paint);
+
+    // // canvas.drawCircle(
+    // //   offset,
+    // //   width / 2,
+    // //   paint,
+    // // );
   }
 
   @override

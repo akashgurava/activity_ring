@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// Convert degrees to radians
-double degreeToRadians(num degree) => degree.roundToDouble() * pi / 180;
+/// Convert degrees to radians.
+double degreeToRadians(double degree) => degree * pi / 180;
 
 /// Darken a [color] by [percent]
 Color darken(Color color, double percent) {
-  assert(percent <= 100, 'percent should not be greater than 100');
+  assert(percent <= 100, 'Darken percent should not be greater than 100');
   final strength = 1 - percent / 100;
   return Color.fromARGB(
     color.alpha,
@@ -19,7 +19,7 @@ Color darken(Color color, double percent) {
 
 /// Brighten a [color] by [percent]
 Color brighten(Color color, double percent) {
-  assert(percent <= 100, 'percent should not be greater than 100');
+  assert(percent <= 100, 'Brighten percent should not be greater than 100');
   final strength = percent / 100;
   return Color.fromARGB(
     color.alpha,
