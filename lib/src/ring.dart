@@ -13,6 +13,7 @@ class Ring extends StatelessWidget {
     this.radius,
     this.width = 25.0,
     this.showBackground = true,
+    this.animate = true,
     this.duration,
     this.child,
     Key key,
@@ -47,11 +48,44 @@ class Ring extends StatelessWidget {
   /// Duration of animation
   final Duration duration;
 
+  /// If true then ring will be animated to fill [percent]
+  final bool animate;
+
   /// Child element for this widget.
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final animatedRing = TweenAnimationBuilder(
+      tween: Tween<double>(begin: 0, end: percent),
+      curve: Curves.easeOutQuad,
+      duration: duration ?? Duration(seconds: (percent ~/ 100) + 1),
+      // ignore: avoid_types_on_closure_parameters
+      builder: (_, double percent, Widget child) {
+        return CustomPaint(
+          painter: DrawRing(
+            percent: percent,
+            color: color,
+            width: width,
+            center: center,
+            radius: radius,
+          ),
+          child: child,
+        );
+      },
+      child: child,
+    );
+    final staticRing = CustomPaint(
+      painter: DrawRing(
+        percent: percent,
+        color: color,
+        width: width,
+        center: center,
+        radius: radius,
+      ),
+      child: child,
+    );
+
     return CustomPaint(
       painter: DrawFullRing(
         width: width,
@@ -59,25 +93,7 @@ class Ring extends StatelessWidget {
         center: center,
         radius: radius,
       ),
-      child: TweenAnimationBuilder(
-        tween: Tween<double>(begin: 0, end: percent),
-        curve: Curves.easeOutQuad,
-        duration: duration ?? Duration(seconds: (percent ~/ 100) + 1),
-        // ignore: avoid_types_on_closure_parameters
-        builder: (_, double percent, Widget child) {
-          return CustomPaint(
-            painter: DrawRing(
-              percent: percent,
-              color: color,
-              width: width,
-              center: center,
-              radius: radius,
-            ),
-            child: child,
-          );
-        },
-        child: child,
-      ),
+      child: animate ? animatedRing : staticRing,
     );
   }
 }
