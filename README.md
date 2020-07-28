@@ -37,6 +37,8 @@ Ring(
 )
 ```
 
+![RingColor](https://github.com/akashgurava/activity_ring/blob/cleanup/media/RingColor.jpg?raw=true)
+
 The above ring is automatically painted with gradients. To have a
 constant color just pass `gradient: false` to RingColorScheme.
 
@@ -52,6 +54,8 @@ Ring(
 ),
 ```
 
+![RingGradient](https://github.com/akashgurava/activity_ring/blob/cleanup/media/RingGradient.jpg?raw=true)
+
 The above ring is automatically painted with gradient from colors given.
 
 ### Using same color for a ring with different color for each ring
@@ -65,6 +69,8 @@ Ring(
   child: Center(child: Text('190%')),
 ),
 ```
+
+![RingColors](https://github.com/akashgurava/activity_ring/blob/cleanup/media/RingColors.jpg?raw=true)
 
 The above ring is automatically painted with gradient from colors given,
 where each color in list represents that ring's color. To have a
@@ -81,6 +87,8 @@ Ring(
   child: Center(child: Text('190%')),
 ),
 ```
+
+![RingGradients](https://github.com/akashgurava/activity_ring/blob/cleanup/media/RingGradients.jpg?raw=true)
 
 The above ring is automatically painted with gradient from colors given,
 where each color in list represents that ring's color. To have a
