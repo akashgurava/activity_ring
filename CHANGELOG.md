@@ -1,5 +1,9 @@
 # Changelog
 
-## [0.1.0] - TODO: Add release date
+## [0.1.0] - 29-07-2020
 
-* TODO: Describe initial release.
+* Initial release
+* 4 color schemes
+* option to turn off gradient
+* option to gradient intensity
+* option to turn off animation

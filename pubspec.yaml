@@ -3,6 +3,7 @@ description: A new Flutter package project.
 version: 0.1.0
 author: Akash <akashgurava@outlook.com>
 homepage: https://github.com/akashgurava/activity_ring
+repository: https://github.com/akashgurava/activity_ring
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
