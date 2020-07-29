@@ -37,7 +37,7 @@ Ring(
 )
 ```
 
-![RingColor](https://github.com/akashgurava/activity_ring/blob/master/media/RingColor.jpg?raw=true)
+![RingColor](https://github.com/akashgurava/activity_ring/blob/master/media/RingColor.gif?raw=true)
 
 The above ring is automatically painted with gradients. To have a
 constant color just pass `gradient: false` to RingColorScheme.
@@ -54,7 +54,7 @@ Ring(
 ),
 ```
 
-![RingGradient](https://github.com/akashgurava/activity_ring/blob/master/media/RingGradient.jpg?raw=true)
+![RingGradient](https://github.com/akashgurava/activity_ring/blob/master/media/RingGradient.gif?raw=true)
 
 The above ring is automatically painted with gradient from colors given.
 
@@ -70,7 +70,7 @@ Ring(
 ),
 ```
 
-![RingColors](https://github.com/akashgurava/activity_ring/blob/master/media/RingColors.jpg?raw=true)
+![RingColors](https://github.com/akashgurava/activity_ring/blob/master/media/RingColors.gif?raw=true)
 
 The above ring is automatically painted with gradient from colors given,
 where each color in list represents that ring's color. To have a
@@ -81,14 +81,14 @@ constant color just pass `gradient: false` to RingColorScheme.
 ```dart
 Ring(
   percent: 190,
-  color: RingColorScheme(ringColors: [[Colors.red, Colors.yellow], [Colors.yellow, Colors.green]]),
+  color: RingColorScheme(ringGradients: [[Colors.red, Colors.yellow], [Colors.yellow, Colors.green]]),
   radius: 80,
   width: 10,
   child: Center(child: Text('190%')),
 ),
 ```
 
-![RingGradients](https://github.com/akashgurava/activity_ring/blob/master/media/RingGradients.jpg?raw=true)
+![RingGradients](https://github.com/akashgurava/activity_ring/blob/master/media/RingGradients.gif?raw=true)
 
 The above ring is automatically painted with gradient from colors given,
 where each color in list represents that ring's color. To have a
