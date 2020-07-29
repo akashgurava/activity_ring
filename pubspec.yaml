@@ -3,7 +3,7 @@ description: "Library to create Progress bars in Apple Watch style rings.
 
 This library is built with to be extremely customizable with low effort.
 Please check the API documentation if you get stuck anywhere."
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/akashgurava/activity_ring
 repository: https://github.com/akashgurava/activity_ring
 
