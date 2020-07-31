@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.0] - 01-08-2020
+
+* add curve param
+* change description
+
 ## [0.1.1] - 29-07-2020
 
 * add gifs for examples

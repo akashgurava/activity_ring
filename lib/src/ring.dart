@@ -14,6 +14,7 @@ class Ring extends StatelessWidget {
     this.width = 25.0,
     this.showBackground = true,
     this.animate = true,
+    this.curve,
     this.duration,
     this.child,
     Key key,
@@ -51,6 +52,9 @@ class Ring extends StatelessWidget {
   /// If true then ring will be animated to fill [percent]
   final bool animate;
 
+  /// Curve to animate the ring
+  final Curve curve;
+
   /// Child element for this widget.
   final Widget child;
 
@@ -58,7 +62,7 @@ class Ring extends StatelessWidget {
   Widget build(BuildContext context) {
     final animatedRing = TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: percent),
-      curve: Curves.easeOutQuad,
+      curve: curve ?? Curves.easeOutQuad,
       duration: duration ?? Duration(seconds: (percent ~/ 100) + 1),
       // ignore: avoid_types_on_closure_parameters
       builder: (_, double percent, Widget child) {
