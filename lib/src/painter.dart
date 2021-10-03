@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class DrawFullRing extends CustomPainter {
   // ignore: public_member_api_docs
   const DrawFullRing({
-    @required this.width,
+    required this.width,
     this.ringPaint,
     this.center,
     this.radius,
@@ -19,19 +19,19 @@ class DrawFullRing extends CustomPainter {
   final double width;
 
   /// Color for ring.
-  final Paint ringPaint;
+  final Paint? ringPaint;
 
   /// Center for this ring.
   ///
   /// If null parent widget's Size will be used.
   /// Then center = Offset(size.width / 2, size.height / 2)
-  final Offset center;
+  final Offset? center;
 
   /// Ring's radius.
   ///
   /// If null parent widget's Size will be used.
   /// Then radius = (min(size.width, size.height) - strokeWidth) / 2
-  final double radius;
+  final double? radius;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -40,7 +40,7 @@ class DrawFullRing extends CustomPainter {
     final ringRadius = radius ?? (min(size.width, size.height) - width) / 2;
 
     if (ringPaint != null) {
-      canvas.drawCircle(ringCenter, ringRadius, ringPaint);
+      canvas.drawCircle(ringCenter, ringRadius, ringPaint!);
     }
   }
 
@@ -54,11 +54,11 @@ class DrawFullRing extends CustomPainter {
 class DrawRing extends CustomPainter {
   // ignore: public_member_api_docs
   const DrawRing({
-    @required this.percent,
-    @required this.color,
-    @required this.width,
-    Offset center,
-    double radius,
+    required this.percent,
+    required this.color,
+    required this.width,
+    Offset? center,
+    double? radius,
   })  : assert(percent != null, 'percent is a mandatory param'),
         assert(width != null, 'strokeWidth is a required param'),
         _center = center,
@@ -81,13 +81,13 @@ class DrawRing extends CustomPainter {
   ///
   /// If null parent widget's Size will be used.
   /// Then center = Offset(size.width / 2, size.height / 2)
-  final Offset _center;
+  final Offset? _center;
 
   /// Ring's radius.
   ///
   /// If null parent widget's Size will be used.
   /// Then radius = (min(size.width, size.height) - strokeWidth) / 2
-  final double _radius;
+  final double? _radius;
 
   final int _numCircles;
 
@@ -125,7 +125,7 @@ class DrawRing extends CustomPainter {
       canvas.drawCircle(
         center,
         radius,
-        color.getCirclePaints(_numCircles - 1, center, width).arcPaint,
+        color.getCirclePaints(_numCircles - 1, center, width).arcPaint!,
       );
     }
 
@@ -135,7 +135,7 @@ class DrawRing extends CustomPainter {
       startAngle,
       sweepAngle,
       false,
-      color.getCirclePaints(_numCircles, center, width).arcPaint,
+      color.getCirclePaints(_numCircles, center, width).arcPaint!,
     );
 
     // Paint initial circle to cover stroke's circle at the beginning
@@ -143,13 +143,13 @@ class DrawRing extends CustomPainter {
       canvas.drawCircle(
         getSmallCircleCenter(center, radius, degreeToRadians(-90)),
         width / 2,
-        color.getCirclePaints(_numCircles - 1, center, width).finalCirclePaint,
+        color.getCirclePaints(_numCircles - 1, center, width).finalCirclePaint!,
       );
     } else {
       canvas.drawCircle(
         getSmallCircleCenter(center, radius, degreeToRadians(-90)),
         width / 2,
-        color.getCirclePaints(_numCircles, center, width).initialCirclePaint,
+        color.getCirclePaints(_numCircles, center, width).initialCirclePaint!,
       );
     }
 
@@ -157,7 +157,7 @@ class DrawRing extends CustomPainter {
       canvas.drawCircle(
         getSmallCircleCenter(center, radius, -pi / 2 + sweepAngle),
         width / 2,
-        color.getCirclePaints(_numCircles, center, width).finalCirclePaint,
+        color.getCirclePaints(_numCircles, center, width).finalCirclePaint!,
       );
     }
 
