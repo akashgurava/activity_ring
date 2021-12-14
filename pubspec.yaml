@@ -1,6 +1,6 @@
 name: activity_ring
 description: "Flutter Library to create Progress bars in Apple Watch style rings."
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/akashgurava/activity_ring
 repository: https://github.com/akashgurava/activity_ring
 
