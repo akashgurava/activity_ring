@@ -12,13 +12,13 @@ class RingPaints {
   });
 
   /// Main arc and ring painter
-  final Paint arcPaint;
+  final Paint? arcPaint;
 
   /// Painter for circle at the beginning
-  final Paint initialCirclePaint;
+  final Paint? initialCirclePaint;
 
   /// Painter for circle at the end
-  final Paint finalCirclePaint;
+  final Paint? finalCirclePaint;
 }
 
 /// Color scheme for painting progress rings.
@@ -78,7 +78,7 @@ class RingColorScheme {
   /// 2nd ring -> Gradient of b->c
   /// 3rd ring -> Gradient of c->brighten(c)
   /// 4th ring -> Gradient of brighten(c)->brighten(c, 2x)..
-  final List<List<Color>> ringGradients;
+  final List<List<Color>>? ringGradients;
 
   /// Creates a ring color from a single color based on position of color.
   ///
@@ -93,7 +93,7 @@ class RingColorScheme {
   /// 1st ring -> a
   /// 2nd ring -> b
   /// 3rd ring -> brighten(b)..
-  final List<Color> ringColors;
+  final List<Color>? ringColors;
 
   /// Creates ring colors from a list of colors
   /// (gradient will be forcefully switched to true).
@@ -105,7 +105,7 @@ class RingColorScheme {
   /// 1st ring -> Gradient of a->b
   /// 2nd ring -> Gradient of b->brighten(b)
   /// 3rd ring -> Gradient of brighten(b)->brighten(b, 2x)..
-  final List<Color> ringGradient;
+  final List<Color>? ringGradient;
 
   /// Creates ring colors from a single color.
   ///
@@ -120,13 +120,13 @@ class RingColorScheme {
   /// 1st ring -> a
   /// 2nd ring -> brighten(a)
   /// 3rd ring -> brighten(a, 2x)..
-  final Color ringColor;
+  final Color? ringColor;
 
   /// Color of background ring on which progress is drawn.
   ///
   /// If null then darken(ringColor, 85) is used.
   /// Note: background ring will only be shown if showBackground is true.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// True if the ring's color should change like gradient.
   final bool gradient;
@@ -168,13 +168,13 @@ class RingColorScheme {
   }
 
   static List<List<Color>> _generateRingColors({
-    @required List<List<Color>> ringGradients,
-    @required List<Color> ringColors,
-    @required List<Color> ringGradient,
-    @required Color ringColor,
-    @required bool gradient,
-    @required double intensity,
-    @required int maxNumRing,
+    required List<List<Color>>? ringGradients,
+    required List<Color>? ringColors,
+    required List<Color>? ringGradient,
+    required Color? ringColor,
+    required bool gradient,
+    required double intensity,
+    required int maxNumRing,
   }) {
     // ignore: omit_local_variable_types
     List<List<Color>> colors = [];
@@ -250,31 +250,31 @@ class RingColorScheme {
       ringColor: ringColor,
       gradient: gradient,
       intensity: intensity,
-      maxNumRing: maxNumRing ?? this.maxNumRing,
+      maxNumRing: maxNumRing,
     );
   }
 
   // ---------------------------------------------------------------------------
   // Variables required to create paints for caching paints
   /// Center of ring
-  Offset _center;
+  Offset? _center;
 
   /// Width of ring
-  double _width;
+  double? _width;
   // ---------------------------------------------------------------------------
 
   /// A cache variable to store color for this scheme
-  Color _first;
+  Color? _first;
 
   /// Get first color from first ring. Also store the result of first run
   /// to a cache variable.
-  Color get first => _first ??= ringGradients?.first?.first ??
+  Color? get first => _first ??= ringGradients?.first.first ??
       ringColors?.first ??
       ringGradient?.first ??
       ringColor;
 
   /// A cache variable to store paints for rings
-  List<RingPaints> _paints;
+  List<RingPaints>? _paints;
 
   /// Generate paints for caching
   void setPaints(Offset center, double width) {
@@ -310,7 +310,7 @@ class RingColorScheme {
         ..strokeWidth = width
         ..shader = shader;
 
-      _paints.add(RingPaints(
+      _paints!.add(RingPaints(
         initialCirclePaint: initialCirclePaint,
         arcPaint: arcPaint,
         finalCirclePaint: finalCirclePaint,
@@ -319,7 +319,7 @@ class RingColorScheme {
   }
 
   /// Get cached paints
-  List<RingPaints> getPaints(Offset center, double width) {
+  List<RingPaints>? getPaints(Offset center, double width) {
     if (center == _center || width == _width) {
       if (_paints != null) {
         return _paints;
@@ -332,11 +332,11 @@ class RingColorScheme {
 
   /// Get cached paints for [ringNum] ring.
   RingPaints getCirclePaints(int ringNum, Offset center, double width) {
-    return getPaints(center, width).elementAt(ringNum - 1);
+    return getPaints(center, width)!.elementAt(ringNum - 1);
   }
 
   /// Get which value should be used for coloring paint.
-  String get mode {
+  String? get mode {
     if (ringGradients != null) {
       return 'ringGradients';
     } else if (ringColors != null) {
