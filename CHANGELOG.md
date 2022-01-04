@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0] - 14-12-2022
+
+* migrate to sound nullsafety
+
 ## [0.2.0] - 01-08-2020
 
 * add curve param

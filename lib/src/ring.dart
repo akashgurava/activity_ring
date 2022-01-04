@@ -7,8 +7,8 @@ import 'package:activity_ring/src/painter.dart';
 class Ring extends StatelessWidget {
   // ignore: public_member_api_docs
   const Ring({
-    @required this.percent,
-    @required this.color,
+    required this.percent,
+    required this.color,
     this.center,
     this.radius,
     this.width = 25.0,
@@ -17,10 +17,8 @@ class Ring extends StatelessWidget {
     this.curve,
     this.duration,
     this.child,
-    Key key,
-  })  : assert(percent != null, 'percent is a mandatory param'),
-        assert(color != null, 'ringColor is a mandatory param'),
-        assert(width != null, 'width cannot be null'),
+    Key? key,
+  })  : assert(width != null, 'width cannot be null'),
         super(key: key);
 
   /// Percent of ring to paint.
@@ -32,13 +30,13 @@ class Ring extends StatelessWidget {
   final RingColorScheme color;
 
   /// Center for this ring.
-  final Offset center;
+  final Offset? center;
 
   /// Ring's radius.
   ///
   /// If null parent widget's Size will be used.
   /// Then radius = (min(size.width, size.height) - strokeWidth) / 2
-  final double radius;
+  final double? radius;
 
   /// Ring's width.
   final double width;
@@ -47,16 +45,16 @@ class Ring extends StatelessWidget {
   final bool showBackground;
 
   /// Duration of animation
-  final Duration duration;
+  final Duration? duration;
 
   /// If true then ring will be animated to fill [percent]
   final bool animate;
 
   /// Curve to animate the ring
-  final Curve curve;
+  final Curve? curve;
 
   /// Child element for this widget.
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class Ring extends StatelessWidget {
       curve: curve ?? Curves.easeOutQuad,
       duration: duration ?? Duration(seconds: (percent ~/ 100) + 1),
       // ignore: avoid_types_on_closure_parameters
-      builder: (_, double percent, Widget child) {
+      builder: (_, double percent, Widget? child) {
         return CustomPaint(
           painter: DrawRing(
             percent: percent,
