@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 import 'package:activity_ring/src/color.dart';
 import 'package:activity_ring/src/painter.dart';
+import 'package:flutter/material.dart';
 
 /// A progress indicator widget with Apple Watch Rings style
 class Ring extends StatelessWidget {
@@ -16,10 +17,10 @@ class Ring extends StatelessWidget {
     this.animate = true,
     this.curve,
     this.duration,
+    this.tip,
     this.child,
     Key? key,
-  })  : assert(width != null, 'width cannot be null'),
-        super(key: key);
+  }) : super(key: key);
 
   /// Percent of ring to paint.
   ///
@@ -53,6 +54,9 @@ class Ring extends StatelessWidget {
   /// Curve to animate the ring
   final Curve? curve;
 
+  /// Tip of the ring
+  final ui.Image? tip;
+
   /// Child element for this widget.
   final Widget? child;
 
@@ -71,6 +75,7 @@ class Ring extends StatelessWidget {
             width: width,
             center: center,
             radius: radius,
+            tip: tip,
           ),
           child: child,
         );
@@ -84,6 +89,7 @@ class Ring extends StatelessWidget {
         width: width,
         center: center,
         radius: radius,
+        tip: tip,
       ),
       child: child,
     );
