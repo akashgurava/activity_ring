@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:activity_ring/src/color.dart';
 import 'package:activity_ring/src/utilities.dart';
@@ -12,8 +13,7 @@ class DrawFullRing extends CustomPainter {
     this.ringPaint,
     this.center,
     this.radius,
-  })  : assert(width != null, 'strokeWidth is a required param'),
-        super();
+  }) : super();
 
   /// Width of ring
   final double width;
@@ -59,11 +59,11 @@ class DrawRing extends CustomPainter {
     required this.width,
     Offset? center,
     double? radius,
-  })  : assert(percent != null, 'percent is a mandatory param'),
-        assert(width != null, 'strokeWidth is a required param'),
-        _center = center,
+    ui.Image? tip,
+  })  : _center = center,
         _radius = radius,
         _numCircles = percent ~/ 100 + 1,
+        _tip = tip,
         super();
 
   /// Percent of ring to paint.
@@ -82,6 +82,9 @@ class DrawRing extends CustomPainter {
   /// If null parent widget's Size will be used.
   /// Then center = Offset(size.width / 2, size.height / 2)
   final Offset? _center;
+
+  //Optional inage used for the ring tip
+  final ui.Image? _tip;
 
   /// Ring's radius.
   ///
@@ -159,6 +162,15 @@ class DrawRing extends CustomPainter {
         width / 2,
         color.getCirclePaints(_numCircles, center, width).finalCirclePaint!,
       );
+    }
+
+    if (_tip != null) {
+      var x = center.dx -
+          (radius * cos(degreeToRadians(90 + (percent * 360 / 100))));
+      var y = center.dy -
+          (radius * sin(degreeToRadians(90 + (percent * 360 / 100))));
+      canvas.drawImage(
+          _tip!, Offset(x - _tip!.width / 2, y - _tip!.height / 2), Paint());
     }
 
     // final oval = Path()
