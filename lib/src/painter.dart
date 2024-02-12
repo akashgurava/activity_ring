@@ -83,7 +83,7 @@ class DrawRing extends CustomPainter {
   /// Then center = Offset(size.width / 2, size.height / 2)
   final Offset? _center;
 
-  //Optional inage used for the ring tip
+  /// Optional image used for the ring tip
   final ui.Image? _tip;
 
   /// Ring's radius.
@@ -123,6 +123,11 @@ class DrawRing extends CustomPainter {
       ..updateRingColors(_numCircles)
       ..setPaints(center, width);
 
+    final x =
+        center.dx - (radius * cos(degreeToRadians(90 + (percent * 360 / 100))));
+    final y =
+        center.dy - (radius * sin(degreeToRadians(90 + (percent * 360 / 100))));
+
     // If number of circles is more than 1, paint only last but one circle
     if (_numCircles > 1) {
       canvas.drawCircle(
@@ -130,6 +135,19 @@ class DrawRing extends CustomPainter {
         radius,
         color.getCirclePaints(_numCircles - 1, center, width).arcPaint!,
       );
+
+      // Add shadow
+      if (percent % 100 > 0.1) {
+        final oval = Path()
+          ..addOval(Rect.fromCircle(center: Offset(x, y), radius: width));
+
+        final shadowPaint = Paint()
+          ..color = Colors.black.withOpacity(0.7)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+          ..blendMode = BlendMode.overlay;
+
+        canvas.drawPath(oval, shadowPaint);
+      }
     }
 
     // Paint ring for 0<percent<100 values.
@@ -165,41 +183,9 @@ class DrawRing extends CustomPainter {
     }
 
     if (_tip != null) {
-      var x = center.dx -
-          (radius * cos(degreeToRadians(90 + (percent * 360 / 100))));
-      var y = center.dy -
-          (radius * sin(degreeToRadians(90 + (percent * 360 / 100))));
       canvas.drawImage(
           _tip!, Offset(x - _tip!.width / 2, y - _tip!.height / 2), Paint());
     }
-
-    // final oval = Path()
-    //   ..addOval(Rect.fromCircle(center: offset, radius: width + 5));
-    // final shadowPaint = Paint()
-    //   ..color = Colors.black.withOpacity(0.3)
-    //   ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 20);
-    // canvas.drawArc(
-    //   rect,
-    //   startAngle,
-    //   sweepAngle,
-    //   false,
-    //   paints,
-    // );
-
-    // canvas.drawPath(oval, shadowPaint);
-
-    // final paint = Paint()
-    //   ..color = Colors.blue
-    //   ..style = PaintingStyle.stroke;
-
-    // final pp = Path()..arcTo(rect, startAngle, sweepAngle, false);
-    // canvas.drawPath(pp, paint);
-
-    // // canvas.drawCircle(
-    // //   offset,
-    // //   width / 2,
-    // //   paint,
-    // // );
   }
 
   @override
